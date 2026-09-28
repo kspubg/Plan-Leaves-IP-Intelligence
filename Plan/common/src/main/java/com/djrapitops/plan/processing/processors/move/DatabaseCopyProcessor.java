@@ -17,6 +17,8 @@
 package com.djrapitops.plan.processing.processors.move;
 
 import com.djrapitops.plan.delivery.domain.World;
+import com.djrapitops.plan.delivery.domain.IpInformation;
+import com.djrapitops.plan.gathering.ip.IpRegion;
 import com.djrapitops.plan.gathering.domain.BaseUser;
 import com.djrapitops.plan.identification.Server;
 import com.djrapitops.plan.identification.ServerUUID;
@@ -35,6 +37,7 @@ import com.djrapitops.plan.storage.database.queries.schema.MySQLSchemaQueries;
 import com.djrapitops.plan.storage.database.sql.tables.*;
 import com.djrapitops.plan.storage.database.sql.tables.webuser.*;
 import com.djrapitops.plan.storage.database.transactions.StoreServerInformationTransaction;
+import com.djrapitops.plan.storage.database.transactions.events.StoreIpInformationTransaction;
 import com.djrapitops.plan.storage.database.transactions.commands.RemoveEverythingTransaction;
 import com.djrapitops.plan.storage.database.transactions.commands.RemoveServerTransaction;
 import com.djrapitops.plan.storage.database.transactions.init.CreateTemporarySessionIdLookupTable;
@@ -148,6 +151,7 @@ public class DatabaseCopyProcessor implements CriticalRunnable {
             copyWorldTimes(serverIdLookupTable, userIdLookupTable, worldIdLookupTable);
             copyKills();
             copyGeolocations(userIdLookupTable);
+            copyIpInformation();
             copyNicknames();
             copyAllowlistBounces(serverIdLookupTable);
             copyAccessLog();
@@ -307,6 +311,23 @@ public class DatabaseCopyProcessor implements CriticalRunnable {
         while (currentId >= 0) {
             currentId = batch.apply(currentId);
         }
+    }
+
+    private void copyIpInformation() {
+        // Official databases predating this optional custom table have nothing to copy.
+        if (!tableCounts.containsKey(IpInformationTable.TABLE_NAME)) return;
+        logCopyMessage(IpInformationTable.TABLE_NAME);
+        batching(currentId -> {
+            List<IpInformationQueries.Row> rows = fromDB.query(IpInformationQueries.fetchAfterId(currentId, ROW_LIMIT));
+            for (IpInformationQueries.Row row : rows) {
+                IpInformation record = row.information();
+                toDB.executeTransaction(new StoreIpInformationTransaction(record.getPlayerUUID(), record.getIpAddress(),
+                        new IpRegion(record.getCountry(), record.getProvince(), record.getCity(), record.getIsp()),
+                        record.getFirstSeen(), record.getLastSeen())).join();
+            }
+            logProgress(rows.size(), IpInformationTable.TABLE_NAME, rows.isEmpty());
+            return rows.isEmpty() ? DONE_SIGNAL : rows.get(rows.size() - 1).id();
+        });
     }
 
     private void copyUserInfo(LookupTable<Integer> serverIdLookupTable, LookupTable<Integer> userIdLookupTable) {

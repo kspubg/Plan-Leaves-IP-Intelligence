@@ -320,3 +320,7 @@ export const fetchStatistics = async (timestamp, identifier) => {
     if (staticSite) url = `/data/statistics-${identifier}.json`;
     return doGetRequest(url, timestamp);
 }
+
+export const fetchIpIntelligence = async (timestamp) => {
+    return doGetRequest('/v1/ipIntelligence', timestamp);
+}

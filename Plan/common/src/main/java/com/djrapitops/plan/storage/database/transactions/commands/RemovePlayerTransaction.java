@@ -53,6 +53,7 @@ public class RemovePlayerTransaction extends ThrowawayTransaction {
         query(PlayerFetchQueries.playerUserName(playerUUID)).ifPresent(this::deleteWebUser);
 
         deleteFromUserIdTable(GeoInfoTable.TABLE_NAME);
+        deleteFromUserIdTable(IpInformationTable.TABLE_NAME);
         deleteFromTable(NicknamesTable.TABLE_NAME);
         deleteFromKillsTable();
         deleteFromUserIdTable(WorldTimesTable.TABLE_NAME);

@@ -34,6 +34,7 @@ import com.djrapitops.plan.gathering.domain.FinishedSession;
 import com.djrapitops.plan.gathering.domain.event.JoinAddress;
 import com.djrapitops.plan.gathering.domain.event.PlayerJoin;
 import com.djrapitops.plan.gathering.geolocation.GeolocationCache;
+import com.djrapitops.plan.gathering.ip.IpIntelligenceService;
 import com.djrapitops.plan.gathering.timed.PlayerExtensionDataUpdateTask;
 import com.djrapitops.plan.identification.ServerUUID;
 import com.djrapitops.plan.processing.Processing;
@@ -59,6 +60,7 @@ public class PlayerJoinEventConsumer {
 
     private final JoinAddressValidator joinAddressValidator;
     private final GeolocationCache geolocationCache;
+    private final IpIntelligenceService ipIntelligenceService;
     private final SessionCache sessionCache;
     private final NicknameCache nicknameCache;
     private final DatapointStore datapointStore;
@@ -75,6 +77,7 @@ public class PlayerJoinEventConsumer {
             DBSystem dbSystem,
             JoinAddressValidator joinAddressValidator,
             GeolocationCache geolocationCache,
+            IpIntelligenceService ipIntelligenceService,
             SessionCache sessionCache,
             NicknameCache nicknameCache,
             DatapointStore datapointStore,
@@ -88,6 +91,7 @@ public class PlayerJoinEventConsumer {
         this.dbSystem = dbSystem;
         this.joinAddressValidator = joinAddressValidator;
         this.geolocationCache = geolocationCache;
+        this.ipIntelligenceService = ipIntelligenceService;
         this.sessionCache = sessionCache;
         this.nicknameCache = nicknameCache;
         this.datapointStore = datapointStore;
@@ -116,6 +120,7 @@ public class PlayerJoinEventConsumer {
                         storeJoinAddress(join);
                         interruptedSession.ifPresent(this::storeInterruptedSession);
                         storeGeolocation(join);
+                        storeIpIntelligence(join);
                         storeOperatorStatus(join);
                         storeNickname(join);
                         updatePlayerDataExtensionValues(join);
@@ -139,6 +144,7 @@ public class PlayerJoinEventConsumer {
         processing.submitCritical(() -> storeProxyPlayer(join)
                 .thenRunAsync(() -> {
                     storeGeolocation(join);
+                    storeIpIntelligence(join);
                     updatePlayerDataExtensionValues(join);
                     updateExport(join);
                     datapointStore.clearLastModified(DatapointCacheKey.SESSION);
@@ -160,6 +166,10 @@ public class PlayerJoinEventConsumer {
                     .map(ip -> new StoreGeoInfoTransaction(join.getPlayerUUID(), ip, join.getTime(), geolocationCache::getCountry))
                     .ifPresent(dbSystem.getDatabase()::executeTransaction);
         }
+    }
+
+    private void storeIpIntelligence(PlayerJoin join) {
+        join.getPlayer().getIPAddress().ifPresent(ip -> ipIntelligenceService.store(join.getPlayerUUID(), ip, join.getTime()));
     }
 
     private void storeWorldInformation(PlayerJoin join) {

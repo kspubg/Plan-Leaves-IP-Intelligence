@@ -400,6 +400,7 @@ html:
             miller: "米勒投影"
             ortographic: "正射投影"
         geolocations: "地理位置"
+        ipIntelligence: "IP 与地区分析"
         groupPermissions: "管理权限组"
         groupUsers: "管理权限组用户"
         help:

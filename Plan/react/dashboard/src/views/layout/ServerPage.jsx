@@ -12,6 +12,7 @@ import {
     faCubes,
     faFilterCircleXmark,
     faGlobe,
+    faFingerprint,
     faInfoCircle,
     faLocationArrow,
     faSearch,
@@ -124,6 +125,12 @@ const ServerSidebar = () => {
                         icon: faGlobe,
                         href: "geolocations",
                         permission: 'page.server.geolocations'
+                    },
+                    {
+                        name: 'html.label.ipIntelligence',
+                        icon: faFingerprint,
+                        href: "ip-intelligence",
+                        permission: 'page.ip.intelligence'
                     },
                 ]
             },

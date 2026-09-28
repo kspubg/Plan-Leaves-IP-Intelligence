@@ -21,6 +21,7 @@ import com.djrapitops.plan.delivery.domain.auth.User;
 import com.djrapitops.plan.delivery.domain.datatransfer.AllowlistBounce;
 import com.djrapitops.plan.delivery.domain.datatransfer.preferences.Preferences;
 import com.djrapitops.plan.gathering.domain.*;
+import com.djrapitops.plan.gathering.ip.IpRegion;
 import com.djrapitops.plan.identification.Server;
 import com.djrapitops.plan.identification.ServerUUID;
 import com.djrapitops.plan.processing.processors.move.DatabaseCopyProcessor;
@@ -222,6 +223,9 @@ public interface DatabaseBackupTest extends DatabaseTestPreparer {
 
             saveDataForBackup(db(), serverUUID());
             saveDataForBackup(backup, TestConstants.SERVER_TWO_UUID);
+            UUID addressOwner = playerUUID;
+            db().executeTransaction(new StoreIpInformationTransaction(addressOwner, "192.0.2.42",
+                    new IpRegion("中国", "广西壮族自治区", "南宁市", "ISP"), 100L, 200L)).join();
 
             Map<String, Integer> beforeBackupFrom = db().query(LookupTableQueries.tableCounts());
             Map<String, Integer> beforeBackupTo = backup.query(LookupTableQueries.tableCounts());
@@ -244,6 +248,7 @@ public interface DatabaseBackupTest extends DatabaseTestPreparer {
             expected.put(UsersTable.TABLE_NAME, 2);
             expected.put(NicknamesTable.TABLE_NAME, 2);
             expected.put(GeoInfoTable.TABLE_NAME, 1);
+            expected.put(IpInformationTable.TABLE_NAME, 1);
             // These tables don't insert duplicates
             expected.put(JoinAddressTable.TABLE_NAME, joinAddresses.size());
             expected.put(SecurityTable.TABLE_NAME, 1);
@@ -268,6 +273,11 @@ public interface DatabaseBackupTest extends DatabaseTestPreparer {
             expected.put(RegistrationTable.TABLE_NAME, 0);
             Map<String, Integer> result = backup.query(LookupTableQueries.tableCounts());
             assertEquals(expected, result);
+            var copiedAddress = backup.query(IpInformationQueries.fetchAll()).stream()
+                    .filter(record -> record.getPlayerUUID().equals(addressOwner)).findFirst().orElseThrow();
+            assertEquals("南宁市", copiedAddress.getCity());
+            assertEquals(100L, copiedAddress.getFirstSeen());
+            assertEquals(200L, copiedAddress.getLastSeen());
 
             Map<String, Object> expectedData = mergeCorrectnessSet(beforeBackupDataFrom, beforeBackupDataTo);
             Map<String, Object> resultData = getDataCorrectnessSet(backup);

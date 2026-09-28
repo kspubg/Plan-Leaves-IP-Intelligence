@@ -31,6 +31,9 @@ import java.util.List;
 public class DataGatheringSettings {
 
     public static final Setting<Boolean> GEOLOCATIONS = new BooleanSetting("Data_gathering.Geolocations");
+    public static final Setting<Boolean> IP_INTELLIGENCE = new BooleanSetting("Data_gathering.IP_intelligence.Enabled");
+    public static final Setting<String> IP_INTELLIGENCE_IPV4_DATABASE = new StringSetting("Data_gathering.IP_intelligence.IPv4_database");
+    public static final Setting<String> IP_INTELLIGENCE_IPV6_DATABASE = new StringSetting("Data_gathering.IP_intelligence.IPv6_database");
     public static final Setting<Boolean> ACCEPT_GEOLITE2_EULA = new BooleanSetting("Data_gathering.Accept_GeoLite2_EULA");
     public static final Setting<String> GEOLOCATION_DOWNLOAD_URL = new StringSetting("Data_gathering.Geolocation_Download_URL");
     public static final Setting<Boolean> PING = new BooleanSetting("Data_gathering.Ping");

@@ -50,8 +50,11 @@ export const Datapoint = ({
     const displayedValue = bold ? <b>{translatedValue}</b> : translatedValue;
     const extraLabel = <ExtraLabel valueLabel={valueLabel}/>;
     const colorClass = color?.startsWith("col-") ? color : "col-" + color;
+    const defaultTitle = typeof name === 'string' && (typeof translatedValue === 'string' || typeof translatedValue === 'number')
+        ? `${name}: ${translatedValue}`
+        : undefined;
     return (
-        <p className={"col-text datapoint"} title={title || (name + ": " + translatedValue)}>
+        <p className={"col-text datapoint"} title={title ?? defaultTitle}>
             {icon && <Fa icon={icon} className={colorClass}/>} {boldTitle ? <b>{name}</b> : name}
             {value !== undefined && <End>{prefix}{displayedValue} {extraLabel}{trend}</End>}
         </p>

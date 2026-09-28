@@ -49,6 +49,7 @@ public class CombineUserTransaction extends ChangeUserUUIDTransaction {
         Integer newId = foundNewId.get();
 
         execute(updateUserId(GeoInfoTable.TABLE_NAME, GeoInfoTable.USER_ID, oldId, newId));
+        execute(updateUserId(IpInformationTable.TABLE_NAME, IpInformationTable.USER_ID, oldId, newId));
         execute(updateUserId(PingTable.TABLE_NAME, PingTable.USER_ID, oldId, newId));
         execute(updateUserId(SessionsTable.TABLE_NAME, SessionsTable.USER_ID, oldId, newId));
         execute(updateUserId(WorldTimesTable.TABLE_NAME, WorldTimesTable.USER_ID, oldId, newId));

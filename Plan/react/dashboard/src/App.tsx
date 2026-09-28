@@ -3,6 +3,7 @@ import './style/sb-admin-2.css'
 import './style/default-colors.css';
 import './style/style.css';
 import './style/mobile.css';
+import './style/ip-intelligence.css';
 import 'react-bootstrap-range-slider/dist/react-bootstrap-range-slider.css';
 
 import {createBrowserRouter, createRoutesFromElements, Navigate, Route, RouterProvider} from "react-router";
@@ -48,6 +49,7 @@ const ServerPluginData = React.lazy(() => import("./views/server/ServerPluginDat
 const ServerWidePluginData = React.lazy(() => import("./views/server/ServerWidePluginData"));
 const ServerJoinAddresses = React.lazy(() => import("./views/server/ServerJoinAddresses"));
 const ServerPlayerRetention = React.lazy(() => import("./views/server/ServerPlayerRetention"));
+const IpIntelligence = React.lazy(() => import("./views/common/IpIntelligence"));
 
 const NetworkPage = React.lazy(() => import("./views/layout/NetworkPage"));
 const NetworkOverview = React.lazy(() => import("./views/network/NetworkOverview"));
@@ -174,6 +176,7 @@ const router = createBrowserRouter(
                 <Route path="retention" element={<Lazy><ServerPlayerRetention/></Lazy>}/>
                 <Route path="players" element={<Lazy><ServerPlayers/></Lazy>}/>
                 <Route path="geolocations" element={<Lazy><ServerGeolocations/></Lazy>}/>
+                <Route path="ip-intelligence" element={<Lazy><IpIntelligence/></Lazy>}/>
                 <Route path="performance" element={<Lazy><ServerPerformance/></Lazy>}/>
                 <Route path="plugin-history" element={<Lazy><ServerPluginHistory/></Lazy>}/>
                 <Route path="plugins-overview" element={<Lazy><ServerPluginData/></Lazy>}/>
@@ -197,6 +200,7 @@ const router = createBrowserRouter(
                 <Route path="join-addresses" element={<Lazy><NetworkJoinAddresses/></Lazy>}/>
                 <Route path="players" element={<Lazy><AllPlayers/></Lazy>}/>
                 <Route path="geolocations" element={<Lazy><NetworkGeolocations/></Lazy>}/>
+                <Route path="ip-intelligence" element={<Lazy><IpIntelligence/></Lazy>}/>
                 <Route path="plugin-history" element={<Lazy><NetworkPluginHistory/></Lazy>}/>
                 <Route path="plugins-overview" element={<Lazy><ServerPluginData/></Lazy>}/>
                 <Route path="plugins/:plugin" element={<Lazy><ServerWidePluginData/></Lazy>}/>

@@ -35,6 +35,7 @@ public class CreateTablesTransaction extends OperationCriticalTransaction {
                 UsersTable.TABLE_NAME,
                 UserInfoTable.TABLE_NAME,
                 GeoInfoTable.TABLE_NAME,
+                IpInformationTable.TABLE_NAME,
                 NicknamesTable.TABLE_NAME,
                 SessionsTable.TABLE_NAME,
                 KillsTable.TABLE_NAME,
@@ -67,6 +68,7 @@ public class CreateTablesTransaction extends OperationCriticalTransaction {
         execute(UsersTable.createTableSQL(dbType));
         execute(UserInfoTable.createTableSQL(dbType));
         execute(GeoInfoTable.createTableSQL(dbType));
+        execute(IpInformationTable.createTableSQL(dbType));
         execute(NicknamesTable.createTableSQL(dbType));
         execute(JoinAddressTable.createTableSQL(dbType));
         executeOther(new StoreJoinAddressTransaction(JoinAddressTable.DEFAULT_VALUE_FOR_LOOKUP));

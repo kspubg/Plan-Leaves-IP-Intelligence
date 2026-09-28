@@ -9,6 +9,7 @@ import {
     faCogs,
     faCubes,
     faGlobe,
+    faFingerprint,
     faInfoCircle,
     faLocationArrow,
     faNetworkWired,
@@ -123,6 +124,12 @@ const NetworkSidebar = () => {
                         icon: faGlobe,
                         href: "geolocations",
                         permission: 'page.network.geolocations'
+                    },
+                    {
+                        name: 'html.label.ipIntelligence',
+                        icon: faFingerprint,
+                        href: "ip-intelligence",
+                        permission: 'page.ip.intelligence'
                     },
                 ]
             },
