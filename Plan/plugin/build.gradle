@@ -114,7 +114,12 @@ tasks.assemble.dependsOn tasks.shadowJar
 tasks.register("bukkitShadowJar", ShadowJar) {
     group = "build"
     description = "Creates a Bukkit/Leaves-only Plan deployment JAR."
-    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    // Paper/Leaves remapping rejects duplicate classes and resources in plugin jars.
+    // Keep the first dependency entry, except service descriptors merged below.
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    filesMatching("META-INF/services/**") {
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    }
 
     dependsOn(":bukkit:classes")
     dependsOn(":extensions:adventure:shadowJar")
