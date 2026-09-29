@@ -88,28 +88,24 @@ const PageNavigationItem = ({page}) => {
                     .filter(item => !item.permission || hasPermission(item.permission))
             }
             setItems(newItems);
-            setCurrentPage(newItems.find(item => location.pathname.startsWith(item.href))?.id);
+            const pathServer = location.pathname.match(/^\/server\/([^/]+)/)?.[1];
+            const serverIdentifier = pathServer ? decodeURIComponent(pathServer) : undefined;
+            const matchingServer = networkMetadata.servers.find(server =>
+                server.serverUUID === serverIdentifier || server.serverName === serverIdentifier);
+            setCurrentPage(newItems.find(item => location.pathname.startsWith(item.href))?.id ||
+                (matchingServer && newItems.find(item => item.id === 'server-' + matchingServer.serverUUID)?.id));
         }
     }, [t, metadata, location, authRequired, loggedIn, user, hasPermission, page]);
-
-    const getSharedPrefix = (one, two) => {
-        let i = 0;
-        while (one[i] && two[i] && one[i] === two[i]) {
-            i++;
-        }
-        return one.substring(0, i);
-    }
 
     const onSelect = ({target}) => {
         const selected = target.value;
         const selectedItem = items.find(item => item.id === selected);
+        if (!selectedItem) return;
         const selectedHref = selectedItem.href;
-        const currentHref = document.location.pathname + document.location.hash;
-
-        const sharedPrefix = getSharedPrefix(selectedHref, currentHref);
-        if (sharedPrefix === '/server/') {
+        const currentServerPath = location.pathname.match(/^\/server\/[^/]+(\/.*)?$/);
+        if (selectedHref.startsWith('/server/') && currentServerPath) {
             // Moves to the same page of a different server, for example /server/{uuid}/performance
-            navigate(selectedHref + currentHref.substring(selectedHref.length));
+            navigate(selectedHref + (currentServerPath[1] || '') + location.hash);
         } else {
             navigate(selectedHref);
         }
@@ -136,7 +132,7 @@ const PageNavigationItem = ({page}) => {
                         aria-label="Page selector"
                         className="form-select form-select-sm scrollbar"
                         id="pageSelector"
-                        defaultValue={currentPage ? currentPage : items[0].id}>
+                        value={currentPage || items[0].id}>
                     {items.map(item =>
                         <option key={item.id} value={item.id}>{item.displayName}</option>)}
                 </select>

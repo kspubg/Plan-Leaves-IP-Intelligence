@@ -1,3 +1,23 @@
+# Plan Leaves IP Intelligence
+
+基于 [Player Analytics (Plan)](https://github.com/plan-player-analytics/Plan) 的社区自定义构建，增加玩家 IP 历史、关联账号与中国省市分布分析。**本仓库及其 JAR 不是 Plan 官方发布版本。**
+
+本次发布基于上游 `bc9412c2d`（Plan 5.9 开发分支），自定义版本为 `5.9 build 3664`。请从本仓库的 [Releases](https://github.com/kspubg/Plan-Leaves-IP-Intelligence/releases) 下载 JAR。
+
+- 「玩家地理与分析」页面提供省份热力图、省市排行、地区玩家列表、游戏名搜索及历史 IP / 同 IP 关联账号。
+- 使用本地 ip2region `.xdb` 解析地区；记录保存在 Plan 数据库的 `plan_ip_information` 表中。
+- IP 收集默认关闭；页面和 `/v1/ipIntelligence` 接口需要 Plan Web 的 `PAGE_IP_INTELLIGENCE` 权限。
+
+安装时先停止服务器、备份 `plugins/Plan/`，再用 Release JAR 替换 `plugins/Plan.jar`。保留原有数据库、`ServerInfoFile.yml` 和配置。启用 IP 功能、配置离线 IP 库、迁移数据库及隐私注意事项见 [部署文档](docs/CONFIGURATION.zh-CN.md)。不要将正式服数据或密钥上传到本仓库。
+
+**English:** This is an unofficial Plan fork based on upstream commit `bc9412c2d`, adding an opt-in, permission-protected IP history and China region dashboard. The release JAR contains no player data or ip2region `.xdb` files. See the [deployment guide](docs/CONFIGURATION.zh-CN.md) for configuration and privacy notes.
+
+本仓库保留原始 Git 历史及 [LGPL-3.0-or-later 许可](LICENSE)。修改不代表上游认可或维护。前端包含 Highcharts，使用时还需遵守其许可条款。
+
+## 上游项目说明 / Upstream README
+
+以下徽章、文档与发布链接指向 **Plan 官方项目**，不表示本仓库的构建或测试状态。
+
 ![Player Analytics](https://raw.githubusercontent.com/plan-player-analytics/drawio-diagrams-storage/master/image/header/main-header-Plan.jpg)
 
 [![CI](https://github.com/plan-player-analytics/Plan/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/plan-player-analytics/Plan/actions/workflows/ci.yml)
