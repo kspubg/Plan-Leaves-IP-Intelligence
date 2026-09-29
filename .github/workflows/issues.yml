@@ -16,7 +16,7 @@ jobs:
   issue_opened:
     name: New Issue Opened
     runs-on: ubuntu-latest
-    if: github.event_name == 'issues' && github.event.action == 'opened'
+    if: github.repository == 'plan-player-analytics/Plan' && github.event_name == 'issues' && github.event.action == 'opened'
     steps:
       - name: Add issue to ${{ env.inbox }}
         uses: leonsteinhaeuser/project-beta-automations@v2.2.1

@@ -6,6 +6,7 @@ on:
 
 jobs:
   update_versions_txt:
+    if: github.repository == 'plan-player-analytics/Plan'
     name: Update versions.txt
     runs-on: ubuntu-latest
     steps:
@@ -38,6 +39,7 @@ jobs:
           push: origin HEAD:master
 
   update_html:
+    if: github.repository == 'plan-player-analytics/Plan'
     name: Update html-branch
     runs-on: ubuntu-latest
 
@@ -61,6 +63,7 @@ jobs:
           commit-message: ${{ steps.tagName.outputs.tag }}
 
   upload_release_ore:
+    if: github.repository == 'plan-player-analytics/Plan'
     name: Ore Upload
     runs-on: ubuntu-latest
     steps:
@@ -93,6 +96,7 @@ jobs:
           ./gradlew :plugin:publishToOre
 
   upload_release_hangar:
+    if: github.repository == 'plan-player-analytics/Plan'
     name: Hangar Upload
     runs-on: ubuntu-latest
     steps:
@@ -123,6 +127,7 @@ jobs:
           ./gradlew :plugin:publishPluginPublicationToHangar
 
   upload_release_modrinth_curseforge:
+    if: github.repository == 'plan-player-analytics/Plan'
     name: Modrinth + Curseforge Upload
     runs-on: ubuntu-latest
     steps:
