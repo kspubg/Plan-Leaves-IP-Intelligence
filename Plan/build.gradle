@@ -72,7 +72,7 @@ subprojects {
         jettyVersion = "12.1.13"
         mysqlVersion = "9.7.0"
         mariadbVersion = "3.5.10"
-        sqliteVersion = "3.42.0.1"
+        sqliteVersion = "3.53.4.0"
         adventureVersion = "4.24.0"
         hikariVersion = "7.1.0"
         slf4jVersion = "2.0.19"
