@@ -34,6 +34,7 @@ public interface DatabaseTestAggregate extends
         ExtensionsDatabaseTest,
         GeolocationQueriesTest,
         IpInformationQueriesTest,
+        MinecraftStatisticsQueriesTest,
         NicknameQueriesTest,
         PingQueriesTest,
         ServerQueriesTest,

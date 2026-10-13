@@ -50,14 +50,17 @@ public class LoginResolver implements NoAuthResolver {
 
     private final DBSystem dbSystem;
     private final ActiveCookieStore activeCookieStore;
+    private final dagger.Lazy<com.djrapitops.plan.delivery.webserver.http.WebServer> webServer;
 
     @Inject
     public LoginResolver(
             DBSystem dbSystem,
-            ActiveCookieStore activeCookieStore
+            ActiveCookieStore activeCookieStore,
+            dagger.Lazy<com.djrapitops.plan.delivery.webserver.http.WebServer> webServer
     ) {
         this.dbSystem = dbSystem;
         this.activeCookieStore = activeCookieStore;
+        this.webServer = webServer;
     }
 
     @POST
@@ -88,7 +91,8 @@ public class LoginResolver implements NoAuthResolver {
     public Response getResponse(String cookie) {
         return Response.builder()
                 .setStatus(200)
-                .setHeader("Set-Cookie", "auth=" + cookie + "; Path=/; Max-Age=" + ActiveCookieStore.getCookieExpiresAfterMs() + "; SameSite=Lax; Secure; HTTPOnly;")
+                .setHeader("Set-Cookie", "auth=" + cookie + "; Path=/; Max-Age=" + ActiveCookieStore.getCookieExpiresAfterMs()
+                        + "; SameSite=Lax; " + (webServer.get().isUsingHTTPS() ? "Secure; " : "") + "HTTPOnly;")
                 .setJSONContent(Collections.singletonMap("success", true))
                 .build();
     }

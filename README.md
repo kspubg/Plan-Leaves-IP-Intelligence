@@ -7,6 +7,8 @@
 - 「玩家地理与分析」页面提供省份热力图、省市排行、地区玩家列表、游戏名搜索及历史 IP / 同 IP 关联账号。
 - 使用本地 ip2region `.xdb` 解析地区；记录保存在 Plan 数据库的 `plan_ip_information` 表中。
 - IP 收集默认关闭；页面和 `/v1/ipIntelligence` 接口需要 Plan Web 的 `PAGE_IP_INTELLIGENCE` 权限。
+- 新增登录后按精确 IP 整组封禁、保留原有处罚的撤销、人工核查观察提示，见 [处置与登录说明](docs/IP-MODERATION.zh-CN.md)。此功能不自动封禁，不自动向已有用户组授予管理权限。
+- 2026-10-13 最终定版：自定义 `5.9 build 3666`，处置面板采用三页签、分层卡片及手机/夜间布局，保留显式开启的 HTTP 登录兼容模式。发布包校验和及验证边界见 [本次发布记录](docs/RELEASE-20261013.zh-CN.md)。
 
 安装时先停止服务器、备份 `plugins/Plan/`，再用 Release JAR 替换 `plugins/Plan.jar`。保留原有数据库、`ServerInfoFile.yml` 和配置。启用 IP 功能、配置离线 IP 库、迁移数据库及隐私注意事项见 [部署文档](docs/CONFIGURATION.zh-CN.md)。不要将正式服数据或密钥上传到本仓库。
 

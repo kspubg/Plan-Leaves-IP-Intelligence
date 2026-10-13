@@ -64,6 +64,8 @@ public interface PlanBukkitComponent {
 
     ErrorLogger errorLogger();
 
+    com.djrapitops.plan.moderation.IpModerationService ipModeration();
+
     @Component.Builder
     interface Builder {
 

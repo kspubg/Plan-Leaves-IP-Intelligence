@@ -92,6 +92,10 @@ public class WebserverLogMessages {
         logger.info(locale.getString(PluginLang.WEB_SERVER_NOTIFY_USING_PROXY_MODE));
     }
 
+    public void authenticationOverHttp() {
+        logger.warn("WebServer: HTTP authentication explicitly enabled. Passwords, sessions and IP data are not encrypted; use a trusted network or tunnel.");
+    }
+
     public void invalidCertificate() {
         logger.warn(locale.getString(PluginLang.WEB_SERVER_FAIL_STORE_LOAD));
     }

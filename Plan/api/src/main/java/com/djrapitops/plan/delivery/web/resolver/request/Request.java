@@ -191,7 +191,8 @@ public final class Request {
      * @return Value if it is present in the request.
      */
     public Optional<String> getHeader(String key) {
-        return Optional.ofNullable(headers.get(key));
+        return headers.entrySet().stream().filter(entry -> entry.getKey().equalsIgnoreCase(key))
+                .map(Map.Entry::getValue).findFirst();
     }
 
     public Request omitFirstInPath() {

@@ -60,8 +60,10 @@ Webserver:
       Key_pass: default
       Store_pass: default
       Alias: alias
-    # HTTPS is required for Login.
+    # Login requires HTTPS unless Allow_HTTP_authentication is explicitly enabled.
     Disable_authentication: false
+    # Explicit opt-in for native login over HTTP. Credentials are not encrypted in transit.
+    Allow_HTTP_authentication: false
     # Disable /auth/register endpoint
     Disable_registration: false
     # Cross-Origin Resource Sharing (Requests from non-Plan web pages)

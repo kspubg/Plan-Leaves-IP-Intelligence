@@ -115,6 +115,8 @@ public class JettyWebserver implements WebServer {
                     .orElseGet(() -> {
                         if (webserverConfiguration.isProxyModeHttps()) {
                             webserverLogMessages.authenticationUsingProxy();
+                        } else if (webserverConfiguration.isHttpAuthenticationAllowed() && webserverConfiguration.isAuthenticationEnabled()) {
+                            webserverLogMessages.authenticationOverHttp();
                         } else {
                             webserverLogMessages.authenticationNotPossible();
                         }
@@ -265,7 +267,7 @@ public class JettyWebserver implements WebServer {
 
     @Override
     public boolean isAuthRequired() {
-        return isUsingHTTPS() && webserverConfiguration.isAuthenticationEnabled();
+        return (isUsingHTTPS() || webserverConfiguration.isHttpAuthenticationAllowed()) && webserverConfiguration.isAuthenticationEnabled();
     }
 
     @Override

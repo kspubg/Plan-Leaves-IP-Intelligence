@@ -40,12 +40,15 @@ import java.util.Optional;
 public class LogoutResolver implements NoAuthResolver {
 
     private final ActiveCookieStore activeCookieStore;
+    private final dagger.Lazy<com.djrapitops.plan.delivery.webserver.http.WebServer> webServer;
 
     @Inject
     public LogoutResolver(
-            ActiveCookieStore activeCookieStore
+            ActiveCookieStore activeCookieStore,
+            dagger.Lazy<com.djrapitops.plan.delivery.webserver.http.WebServer> webServer
     ) {
         this.activeCookieStore = activeCookieStore;
+        this.webServer = webServer;
     }
 
     @GET
@@ -80,7 +83,8 @@ public class LogoutResolver implements NoAuthResolver {
     public Response getResponse() {
         return Response.builder()
                 .redirectTo("/login")
-                .setHeader("Set-Cookie", "auth=expired; Max-Age=0; SameSite=Lax; Secure; HTTPOnly;")
+                .setHeader("Set-Cookie", "auth=expired; Path=/; Max-Age=0; SameSite=Lax; "
+                        + (webServer.get().isUsingHTTPS() ? "Secure; " : "") + "HTTPOnly;")
                 .build();
     }
 }

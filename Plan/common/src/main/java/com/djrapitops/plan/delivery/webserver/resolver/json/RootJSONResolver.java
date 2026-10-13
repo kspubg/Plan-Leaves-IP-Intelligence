@@ -96,6 +96,7 @@ public class RootJSONResolver {
             RetentionJSONResolver retentionJSONResolver,
             PlayerJoinAddressJSONResolver playerJoinAddressJSONResolver,
             IpIntelligenceJSONResolver ipIntelligenceJSONResolver,
+            IpModerationJSONResolver ipModerationJSONResolver,
             PluginHistoryJSONResolver pluginHistoryJSONResolver,
             AllowlistJSONResolver allowlistJSONResolver,
             PlayersOnlineJSONResolver playersOnlineJSONResolver,
@@ -147,6 +148,7 @@ public class RootJSONResolver {
                 .add("retention", retentionJSONResolver)
                 .add("joinAddresses", playerJoinAddressJSONResolver)
                 .add("ipIntelligence", ipIntelligenceJSONResolver)
+                .add("ipModeration", ipModerationJSONResolver)
                 .add("preferences", preferencesJSONResolver)
                 .add("gameAllowlistBounces", allowlistJSONResolver)
                 .add("theme", themeJSONResolver)

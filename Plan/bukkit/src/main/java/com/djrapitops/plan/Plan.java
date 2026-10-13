@@ -91,6 +91,7 @@ public class Plan extends JavaPlugin implements PlanPlugin {
             errorLogger = component.errorLogger();
             serverShutdownSave = component.serverShutdownSave();
             locale = system.getLocaleSystem().getLocale();
+            component.ipModeration().setBackend(new com.djrapitops.plan.moderation.BukkitModerationBackend(getServer(), runnableFactory));
             system.enable();
 
             registerMetrics();

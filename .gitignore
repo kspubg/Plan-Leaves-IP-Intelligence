@@ -6,8 +6,22 @@ builds/
 # Nukkit & Fabric create log files during tests for some reason.
 server.log
 /Plan/fabric/logs/
+/Plan/nukkit/logs/
 
 *.db
+*.db-wal
+*.db-shm
+*.xdb
+# Runtime private keys/certificates must never be published. Existing upstream test fixtures remain tracked.
+*.jks
+*.p12
+*.pfx
+*.pem
+*.key
+ip-moderation.json
+ip-moderation.json.tmp
+banned-players.json
+banned-ips.json
 
 **/.gradle
 out/

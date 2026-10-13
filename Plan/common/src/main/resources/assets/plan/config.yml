@@ -61,8 +61,10 @@ Webserver:
       Key_pass: default
       Store_pass: default
       Alias: alias
-    # HTTPS is required for Login.
+    # Login requires HTTPS unless Allow_HTTP_authentication is explicitly enabled.
     Disable_authentication: false
+    # Explicit opt-in for native login over HTTP. Credentials are not encrypted in transit.
+    Allow_HTTP_authentication: false
     # Disable /auth/register endpoint
     Disable_registration: false
     # Cross-Origin Resource Sharing (Requests from non-Plan web pages)
@@ -111,6 +113,8 @@ Data_gathering:
   # This is disabled by default because IP addresses are personal data.
   IP_intelligence:
     Enabled: false
+    # Low-confidence IPv4 /24 observations only, never automatic bans.
+    Subnet_alerts: false
     # Paths are relative to the Plan plugin directory.
     IPv4_database: "ip2region/ip2region_v4.xdb"
     IPv6_database: "ip2region/ip2region_v6.xdb"

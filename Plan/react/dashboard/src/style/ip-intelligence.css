@@ -275,3 +275,13 @@
         text-align: left;
     }
 }
+.ip-moderation-actions {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+}
+
+.ip-moderation-card td {
+    overflow-wrap: anywhere;
+    vertical-align: middle;
+}

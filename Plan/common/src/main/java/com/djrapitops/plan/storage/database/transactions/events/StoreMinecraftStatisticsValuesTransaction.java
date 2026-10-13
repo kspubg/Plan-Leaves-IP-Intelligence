@@ -61,7 +61,11 @@ public class StoreMinecraftStatisticsValuesTransaction extends Transaction {
                 statement.setInt(3, userId);
                 statement.setInt(4, serverId);
                 for (Integer id : existingStatisticIds) {
-                    statement.setInt(1, valuesById.get(id));
+                    // Imported databases or changed worlds can contain statistics absent from this file.
+                    // Absence is not a zero value: retain the previously collected statistic.
+                    Integer value = valuesById.get(id);
+                    if (value == null) continue;
+                    statement.setInt(1, value);
                     statement.setInt(2, id);
                     statement.addBatch();
                 }

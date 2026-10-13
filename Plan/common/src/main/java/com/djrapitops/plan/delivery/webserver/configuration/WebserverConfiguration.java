@@ -65,6 +65,10 @@ public class WebserverConfiguration {
         return config.isFalse(WebserverSettings.DISABLED_AUTHENTICATION);
     }
 
+    public boolean isHttpAuthenticationAllowed() {
+        return config.isTrue(WebserverSettings.HTTP_AUTHENTICATION);
+    }
+
     public AccessAddressPolicy getAccessAddressPolicy() {
         return config.isTrue(WebserverSettings.IP_USE_X_FORWARDED_FOR)
                 ? AccessAddressPolicy.X_FORWARDED_FOR_HEADER

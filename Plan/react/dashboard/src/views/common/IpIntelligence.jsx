@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useMemo, useRef, useState} from "react";
-import {Badge, Card, Col, Form, InputGroup, Row, Table} from "react-bootstrap";
+import {Badge, Button, Card, Col, Form, InputGroup, Row, Table} from "react-bootstrap";
 import {FontAwesomeIcon as Fa} from "@fortawesome/react-fontawesome";
 import {
     faChevronDown,
@@ -18,6 +18,7 @@ import {fetchIpIntelligence} from "../../service/serverService";
 import {useAuth} from "../../hooks/authenticationHook.tsx";
 import {CardLoader} from "../../components/navigation/Loader.tsx";
 import CardHeader from "../../components/cards/CardHeader.tsx";
+import IpModerationPanel from "../../components/moderation/IpModerationPanel";
 
 const provinceKeys = {
     "北京市": "cn-bj", "天津市": "cn-tj", "河北省": "cn-he", "山西省": "cn-sx", "内蒙古自治区": "cn-nm",
@@ -108,13 +109,15 @@ const ChinaHeatmap = ({counts, onSelectProvince}) => {
 };
 
 const IpIntelligence = () => {
-    const {hasPermission} = useAuth();
+    const {hasPermission, loggedIn} = useAuth();
     const canAccess = hasPermission("page.ip.intelligence");
     const {data, loadingError} = useDataRequest(fetchIpIntelligence, [], canAccess);
     const [selectedProvince, setSelectedProvince] = useState(undefined);
     const [expandedProvince, setExpandedProvince] = useState(undefined);
     const [search, setSearch] = useState("");
     const [expandedPlayers, setExpandedPlayers] = useState(() => new Set());
+    const [moderationSelection, setModerationSelection] = useState(null);
+    const canModerate = loggedIn && hasPermission("manage.ip.moderation");
 
     const records = data?.records || [];
     const recordsByPlayer = useMemo(() => {
@@ -285,7 +288,7 @@ const IpIntelligence = () => {
                 {(search.trim() || selectedProvince) && relatedPlayers.length === 0 && <div className="ip-intelligence-empty">没有匹配的记录。</div>}
                 {relatedPlayers.length > 0 && <div className="table-responsive">
                     <Table hover className="mb-0 ip-intelligence-table">
-                        <thead><tr><th>玩家</th><th>IP 地址</th><th>地区</th><th>网络</th><th>最近出现</th></tr></thead>
+                        <thead><tr><th>玩家</th><th>IP 地址</th><th>地区</th><th>网络</th><th>最近出现</th>{canModerate && <th>管理操作</th>}</tr></thead>
                         <tbody>{relatedPlayers.map(record => {
                             const playerRecords = recordsByPlayer.get(record.playerUUID) || [];
                             const relatedAccounts = getRelatedAccounts(record.playerUUID);
@@ -308,9 +311,13 @@ const IpIntelligence = () => {
                                     <td><Badge bg="light" text="dark">{latestRecord.province || "未知"}</Badge> {latestRecord.city || ""}</td>
                                     <td>{latestRecord.isp || "未知"}</td>
                                     <td>{latestRecord.lastSeen ? new Date(latestRecord.lastSeen).toLocaleString() : "-"}</td>
+                                    {canModerate && <td><div className="ip-moderation-actions">
+                                        <Button size="sm" variant="outline-danger" onClick={() => setModerationSelection({kind: "ban", record})}>封禁关联账号</Button>
+                                        <Button size="sm" variant="outline-secondary" onClick={() => setModerationSelection({kind: "watch", record})}>加入观察</Button>
+                                    </div></td>}
                                 </tr>
                                 {isExpanded && <tr className="ip-intelligence-expansion-row">
-                                    <td colSpan={5}>
+                                    <td colSpan={canModerate ? 6 : 5}>
                                         <div className="ip-intelligence-related-header">共享历史 IP 的关联账号</div>
                                         <div className="ip-intelligence-related-list">
                                             {relatedAccounts.map(account => <div className="ip-intelligence-related-account" key={account.playerUUID}>
@@ -330,6 +337,7 @@ const IpIntelligence = () => {
                 </div>}
             </Card.Body>
         </Card>
+        <IpModerationPanel records={records} selection={moderationSelection} onSelection={setModerationSelection}/>
     </section>;
 };
 

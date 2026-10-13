@@ -239,6 +239,8 @@ public enum WebPermission implements Supplier<String>, Lang {
     ACCESS_DOCS("Allows accessing /docs page"),
     ACCESS_THEME_EDITOR("Allows accessing /theme-editor page"),
 
+    MANAGE_IP_MODERATION("Allows native IP/account bans and observation list management"),
+    MANAGE_IP_MODERATION_UNDO("Allows undoing bans created by IP moderation"),
     MANAGE_GROUPS("Allows modifying group permissions & Access to /manage/groups page"),
     MANAGE_USERS("Allows modifying what users belong to what group"),
     MANAGE_THEMES("Allows saving or deleting themes via theme-editor for everyone");

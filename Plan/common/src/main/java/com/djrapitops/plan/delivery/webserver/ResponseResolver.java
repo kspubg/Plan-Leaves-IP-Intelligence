@@ -244,11 +244,7 @@ public class ResponseResolver {
         boolean isAuthRequired = webServer.get().isAuthRequired() && resolver.requiresAuth(request);
         if (isAuthRequired) {
             if (user.isEmpty()) {
-                if (webServer.get().isUsingHTTPS()) {
-                    throw new WebUserAuthException(FailReason.NO_USER_PRESENT);
-                } else {
-                    return CompletableFuture.completedFuture(responseFactory.forbidden403());
-                }
+                throw new WebUserAuthException(FailReason.NO_USER_PRESENT);
             }
 
             if (!resolver.canAccess(request)) {
